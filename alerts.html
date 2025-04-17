@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Alerts - FraudShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+
+            /* Theme variables */
+            --bg-primary: var(--gray-50);
+            --bg-secondary: white;
+            --text-primary: var(--gray-800);
+            --text-secondary: var(--gray-600);
+            --border-color: var(--gray-200);
+        }
+
+        /* Dark theme variables */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border-color: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .nav-links {
+            width: 100%;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .alert-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: white;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .alert-card {
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .alert-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .alert-time {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .alert-content {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .alert-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mark-read {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .mark-read:hover {
+            background: #e5e7eb;
+        }
+
+        .delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .delete:hover {
+            background: #fecaca;
+        }
+
+        .no-alerts {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+
+        .no-alerts i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #d1d5db;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <img src="images/LOGO.png" alt="FraudShield Logo" class="logo">
+            <h1 class="brand-name">FRAUDSHIELD</h1>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+                <a href="report.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    Reports
+                </a>
+                <a href="alerts.html" class="nav-item active">
+                    <i class="fas fa-bell"></i>
+                    Alerts
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Fraud Alerts</h1>
+                <div class="user-menu">
+                    <button class="btn btn-primary" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i> Theme
+                    </button>
+                    <button class="btn btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="alert-filters">
+                <button class="filter-btn active" data-filter="all">All Alerts</button>
+                <button class="filter-btn" data-filter="unread">Unread</button>
+                <button class="filter-btn" data-filter="fraud">Fraudulent</button>
+                <button class="filter-btn" data-filter="suspicious">Suspicious</button>
+            </div>
+
+            <div id="alerts-container">
+                <!-- Alerts will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAf3HK1-DNMVdBP3nlDEjOcKHw25kyOP8M",
+            authDomain: "fraudshield2.firebaseapp.com",
+            projectId: "fraudshield2",
+            storageBucket: "fraudshield2.appspot.com",
+            messagingSenderId: "574836527786",
+            appId: "1:574836527786:web:30b2bf63a5b175632ff6d3",
+            measurementId: "G-T4Q17V89R0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentFilter = 'all';
+        const alertsContainer = document.getElementById('alerts-container');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                currentFilter = button.dataset.filter;
+                loadAlerts();
+            });
+        });
+
+        function createAlertCard(alert) {
+            const card = document.createElement('div');
+            card.className = 'alert-card';
+            const isFraud = alert.is_fraud;
+            const status = isFraud ? 'Fraudulent' : 'Safe';
+            const statusClass = isFraud ? 'danger' : 'success';
+            
+            card.innerHTML = `
+                <div class="alert-header">
+                    <h3 class="alert-title">${isFraud ? 'Fraudulent Transaction' : 'Safe Transaction'}</h3>
+                    <span class="alert-time">${alert.timestamp}</span>
+                </div>
+                <div class="alert-content">
+                    <p>User Email: ${alert.user_email}</p>
+                    <p>Amount: ₹${alert.amount.toLocaleString()}</p>
+                    <p>Location: ${alert.location}</p>
+                    <p>Status: <span class="status-badge ${statusClass}">${status}</span></p>
+                </div>
+                <div class="alert-actions">
+                    <button class="action-btn mark-read" onclick="markAsRead('${alert.id}')">
+                        Mark as Read
+                    </button>
+                    <button class="action-btn delete" onclick="deleteAlert('${alert.id}')">
+                        Delete
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        function loadAlerts() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const transactionsRef = collection(db, 'transactions');
+            let q = query(transactionsRef);
+
+            if (currentFilter === 'unread') {
+                q = query(transactionsRef, where('read', '==', false));
+            } else if (currentFilter === 'fraud') {
+                q = query(transactionsRef, where('is_fraud', '==', true));
+            } else if (currentFilter === 'suspicious') {
+                q = query(transactionsRef, where('is_fraud', '==', true));
+            }
+
+            onSnapshot(q, (snapshot) => {
+                alertsContainer.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    alertsContainer.innerHTML = `
+                        <div class="no-alerts">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>No alerts found</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const alerts = [];
+                snapshot.forEach(doc => {
+                    alerts.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort alerts by timestamp in descending order (newest first)
+                alerts.sort((a, b) => {
+                    const dateA = new Date(a.timestamp);
+                    const dateB = new Date(b.timestamp);
+                    return dateB - dateA;
+                });
+
+                alerts.forEach(alert => {
+                    const card = createAlertCard(alert);
+                    alertsContainer.appendChild(card);
+                });
+            });
+        }
+
+        window.markAsRead = async (alertId) => {
+            try {
+                const alertRef = doc(db, 'transactions', alertId);
+                await updateDoc(alertRef, {
+                    read: true
+                });
+            } catch (error) {
+                console.error('Error marking alert as read:', error);
+            }
+        };
+
+        window.deleteAlert = async (alertId) => {
+            try {
+                const alertRef = doc(db, 'transactions', alertId);
+                await deleteDoc(alertRef);
+            } catch (error) {
+                console.error('Error deleting alert:', error);
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadAlerts();
+            } else {
+                window.location.href = 'signin.html';
+            }
+        });
+
+        // Theme management
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        window.toggleTheme = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update theme button icon
+            const themeIcon = document.querySelector('.btn-primary i');
+            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        };
+
+        // Update initial theme button icon
+        const themeIcon = document.querySelector('.btn-primary i');
+        themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    </script>
+</body>
+</html> 

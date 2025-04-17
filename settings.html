@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="settings">Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="js/language.js"></script>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+
+            /* Theme variables */
+            --bg-primary: var(--gray-50);
+            --bg-secondary: white;
+            --text-primary: var(--gray-800);
+            --text-secondary: var(--gray-600);
+            --border-color: var(--gray-200);
+        }
+
+        /* Dark theme variables */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border-color: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--bg-primary);
+            color: var(--primary);
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .settings-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            margin-bottom: 2rem;
+        }
+
+        .settings-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .settings-header p {
+            color: var(--text-secondary);
+        }
+
+        .settings-section {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .settings-section h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .settings-group {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .setting-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .setting-info h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .setting-info p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338CA;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #DC2626;
+        }
+
+        .select-wrapper {
+            position: relative;
+            min-width: 200px;
+        }
+
+        .select-wrapper select {
+            width: 100%;
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-secondary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: var(--success);
+            color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <img src="images/LOGO.png" alt="FraudShield Logo" class="logo">
+            <h1 class="brand-name">FRAUDSHIELD</h1>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span data-translate="dashboard">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="report.html" class="nav-link">
+                            <i class="fas fa-file-alt"></i>
+                            <span data-translate="reports">Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="alerts.html" class="nav-link">
+                            <i class="fas fa-bell"></i>
+                            <span data-translate="alerts">Alerts</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="profile.html" class="nav-link">
+                            <i class="fas fa-user"></i>
+                            <span data-translate="profile">Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="settings.html" class="nav-link active">
+                            <i class="fas fa-cog"></i>
+                            <span data-translate="settings">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <h1 data-translate="settings">Settings</h1>
+                    <p data-translate="managePreferences">Manage your account preferences and settings</p>
+                </div>
+
+                <div class="settings-section">
+                    <h2 data-translate="appearance">Appearance</h2>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3 data-translate="theme">Theme</h3>
+                                <p data-translate="themeDesc">Choose between light and dark mode</p>
+                            </div>
+                            <button class="btn btn-primary" onclick="toggleTheme()">
+                                <i class="fas fa-moon"></i> <span data-translate="toggleTheme">Toggle Theme</span>
+                            </button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3 data-translate="language">Language</h3>
+                                <p data-translate="languageDesc">Select your preferred language</p>
+                            </div>
+                            <div class="select-wrapper">
+                                <select id="languageSelect" onchange="changeLanguage(this.value)">
+                                    <option value="en">English</option>
+                                    <option value="hi">हिंदी</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3 data-translate="timezone">Timezone</h3>
+                                <p data-translate="timezoneDesc">Set your local timezone</p>
+                            </div>
+                            <div class="select-wrapper">
+                                <select id="timezoneSelect" onchange="changeTimezone(this.value)">
+                                    <option value="UTC">UTC</option>
+                                    <option value="IST">IST (UTC+5:30)</option>
+                                    <option value="EST">EST (UTC-5)</option>
+                                    <option value="PST">PST (UTC-8)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h2 data-translate="dataManagement">Data Management</h2>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3 data-translate="exportData">Export Data</h3>
+                                <p data-translate="exportDataDesc">Download your transaction data in Excel format</p>
+                            </div>
+                            <button class="btn btn-success" onclick="exportData()">
+                                <i class="fas fa-file-excel"></i> <span data-translate="export">Export</span>
+                            </button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3 data-translate="deleteAccount">Delete Account</h3>
+                                <p data-translate="deleteAccountDesc">Permanently delete your account and all associated data</p>
+                            </div>
+                            <button class="btn btn-danger" onclick="showDeleteAccountModal()">
+                                <i class="fas fa-trash"></i> <span data-translate="deleteAccount">Delete Account</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="deleteAccountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-translate="deleteAccount">Delete Account</h2>
+                <p data-translate="deleteAccountConfirm">Are you sure you want to delete your account? This action cannot be undone.</p>
+            </div>
+            <div class="modal-body">
+                <p data-translate="deleteAccountWarning">All your data will be permanently deleted, including:</p>
+                <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                    <li data-translate="transactionHistory">Transaction history</li>
+                    <li data-translate="userPreferences">User preferences</li>
+                    <li data-translate="accountSettings">Account settings</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="hideDeleteAccountModal()" data-translate="cancel">Cancel</button>
+                <button class="btn btn-danger" onclick="deleteAccount()" data-translate="deleteAccount">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+        import { getFirestore, collection, query, where, getDocs, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+        import { getAuth, onAuthStateChanged, signOut, deleteUser } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAf3HK1-DNMVdBP3nlDEjOcKHw25kyOP8M",
+            authDomain: "fraudshield2.firebaseapp.com",
+            projectId: "fraudshield2",
+            storageBucket: "fraudshield2.appspot.com",
+            messagingSenderId: "574836527786",
+            appId: "1:574836527786:web:30b2bf63a5b175632ff6d3",
+            measurementId: "G-T4Q17V89R0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Theme management
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        window.toggleTheme = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update theme button icon
+            const themeIcon = document.querySelector('.btn-primary i');
+            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+            showToast(getTranslation('themeUpdated'));
+        };
+
+        // Update initial theme button icon
+        const themeIcon = document.querySelector('.btn-primary i');
+        themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+        // Language management
+        const language = getLanguage();
+        document.documentElement.setAttribute('lang', language);
+        document.getElementById('languageSelect').value = language;
+
+        window.changeLanguage = (lang) => {
+            setLanguage(lang);
+            showToast(getTranslation('languageUpdated'));
+        };
+
+        // Initialize language
+        updateTextContent();
+
+        // Timezone management
+        const timezone = localStorage.getItem('timezone') || 'UTC';
+        document.getElementById('timezoneSelect').value = timezone;
+
+        window.changeTimezone = (tz) => {
+            localStorage.setItem('timezone', tz);
+            showToast(getTranslation('timezoneUpdated'));
+        };
+
+        // Export data functionality
+        window.exportData = async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    showToast(getTranslation('pleaseLogin'), 'error');
+                    return;
+                }
+
+                // Show loading message
+                showToast(getTranslation('preparingData'));
+
+                // Get all transactions for the user
+                const transactionsRef = collection(db, "transactions");
+                const q = query(transactionsRef, where("userId", "==", user.uid));
+                const snapshot = await getDocs(q);
+                
+                const transactions = [];
+                snapshot.forEach(doc => {
+                    transactions.push(doc.data());
+                });
+
+                // Create Excel workbook
+                const workbook = XLSX.utils.book_new();
+                
+                // Add transactions sheet
+                const transactionsSheet = XLSX.utils.json_to_sheet(transactions);
+                XLSX.utils.book_append_sheet(workbook, transactionsSheet, "Transactions");
+
+                // Generate Excel file
+                const date = new Date().toLocaleDateString('en-IN').replace(/\//g, '-');
+                XLSX.writeFile(workbook, `fraudshield-data-${date}.xlsx`);
+
+                showToast(getTranslation('dataExported'));
+            } catch (err) {
+                console.error('Error exporting data:', err);
+                showToast(getTranslation('exportError'), 'error');
+            }
+        };
+
+        // Delete account functionality
+        window.showDeleteAccountModal = () => {
+            document.getElementById('deleteAccountModal').style.display = 'block';
+        };
+
+        window.hideDeleteAccountModal = () => {
+            document.getElementById('deleteAccountModal').style.display = 'none';
+        };
+
+        window.deleteAccount = async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    showToast(getTranslation('pleaseLogin'), 'error');
+                    return;
+                }
+
+                // Delete user's transactions
+                const transactionsRef = collection(db, "transactions");
+                const q = query(transactionsRef, where("userId", "==", user.uid));
+                const snapshot = await getDocs(q);
+                
+                const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+                await Promise.all(deletePromises);
+
+                // Delete user account
+                await deleteUser(user);
+                
+                showToast(getTranslation('accountDeleted'));
+                window.location.href = "signin.html";
+            } catch (err) {
+                console.error('Error deleting account:', err);
+                showToast(getTranslation('deleteError'), 'error');
+            }
+        };
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.background = type === 'success' ? 'var(--success)' : 'var(--danger)';
+            toast.style.display = 'block';
+
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Auth state changes
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "signin.html";
+            }
+        });
+    </script>
+</body>
+</html>
